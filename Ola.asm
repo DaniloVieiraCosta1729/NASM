@@ -1,9 +1,11 @@
 section .data
 	mensagem db 'Ola, mundo! Finalmente estou entendendo o Assembly =)', 10
 	jeitoEstranho db 0x4F,108,97,44,32,0x4d,0x75,0x6e,0x64,111,10
+	novaMensagem db 'O compilador consegue contar a qtd. de caracteres com ',36,'-',10
 
 	tamnhoJeitoEstranho equ 11
 	tamanhoMensagem equ 54
+	tamNovaMensagem equ $-novaMensagem
 
 section .text
 	global _start
@@ -19,6 +21,12 @@ _start:
 	mov rdi, 1
 	mov rsi, mensagem
 	mov rdx, tamanhoMensagem
+	syscall
+
+	mov rax, 1
+	mov rdi, 1
+	mov rsi, novaMensagem
+	mov rdx, tamNovaMensagem
 	syscall
 
 	mov rax, 60; system call que encerra o programa
