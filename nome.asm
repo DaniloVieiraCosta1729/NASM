@@ -28,10 +28,10 @@ _start:
 
 	mov [tamNomeReal], rax
 
-	mov rax, 1
-	mov rdi, 1
-	mov rsi, saudacao
-	mov rdx, tamSaudacao
+	mov eax, 1
+	mov edi, 1
+	mov esi, saudacao
+	mov edx, tamSaudacao
 	syscall
 
 	mov rax, 1
