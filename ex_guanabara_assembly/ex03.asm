@@ -8,15 +8,15 @@
 
 section .data
     textoX db "Digite o primeiro numero: "
-    tamTextoX equ $- textoX
+    tamTextoX equ $-textoX
 
     textoY db "Digite o segundo numero: "
-    tamTextoY equ $- textoY
+    tamTextoY equ $-textoY
 
     msgFinal db "A soma dos numeros digitados eh: "
-    tamMsgFinal equ $ - msgFinal
+    tamMsgFinal equ $-msgFinal
 
-    qtdDigitos equ 7
+    qtdDigitos equ 10
 
     teste db "testando: "
     tamTeste equ $-teste
@@ -50,6 +50,7 @@ _start:
     syscall
 
     mov [tamX], rax
+    dec byte [tamX]; O loop estava computando o '\n' junto. Isso resolve o problema '\n'-'0' ao resultado.
 
     ; pede o segundo número
     mov rax, 1
@@ -66,23 +67,24 @@ _start:
     syscall
 
     mov [tamY], rax
+    dec byte [tamY]
 
     ; Vamos usar uma função no sentido mais geral aqui. Eu vou seguir a convenção de chamada system V AMD64.
     ; O que vou tentar é: usar a duas informações cruciais (endereço e tamanho) e então usar dois laços para montar o número no registrador r8 e no final passar o valor para rax e retornar. Mas vai ter um momento em que eu vou precisar somar o valor de rax com o valor de r8, então precisamos zerar o r8 antes de começar.
 
     mov rsi, x
-    mov rdi, [tamX]
+    movzx rdi, byte [tamX]
     call criaNumero
     xor r9, r9; zerando o registrador que vai fazer o serviço fenomenal, se é q vc me entende.
     add r9, rax
 
     mov rsi, y
-    mov rdi, [tamY]
+    movzx rdi, byte [tamY]
     call criaNumero
     add r9, rax
 
     mov rdi, r9
-    lea rsi, resultado
+    lea rsi, [resultado + 10]
     call criaTexto
 
     ; finalmente, vamos motrar o resultado
@@ -91,6 +93,8 @@ _start:
     mov rsi, msgFinal
     mov rdx, tamMsgFinal
     syscall
+
+    xor rdx, rdx
 
     mov rax, 1
     mov rdi, 1
@@ -105,7 +109,7 @@ _start:
 
     ; Pronto! agora só falta criar uma função que faça o caminho inverso, ou seja, pegue um número e transforme ele em uma string.
     
-    ;cri texto (número em rdi e endereço em rsi)
+    ;cri texto (número em rdi e final do endereço em rsi)
 criaTexto:
     mov rbx, 10
     mov rax, rdi
@@ -116,7 +120,7 @@ criaTexto:
         div rbx
         add rdx, '0'
         mov [rsi], rdx
-        add rsi, 1
+        dec rsi
         test rax, rax
         jnz loopDivisao
     mov [tamResultado], rcx
@@ -125,20 +129,14 @@ criaTexto:
     ; criar numero (endereço em rsi e tamanho em rdi)
 criaNumero:
     xor r8, r8
-    mov rcx, rdi
-    mov rdx, rcx
-    mov rax, [rsi]
-    sub rax, '0'
+    xor rax, rax
+    xor rcx, rcx
     loop01:
-        imul rax, 10
-        dec rdx
-        test rdx, rdx
-        jnz loop01
-    add r8, rax
-    dec rdi
-    add rsi, 1
-    test rdi, rdi
-    jnz criaNumero
-    mov rax, r8
-    ret
-    
+    movzx r8, byte [rsi + rcx]; Isso é novo; O movzx, quando usado com byte, passa apenas o primeiro byte do endereço e zera os restantantes. Isso é importante, pois elimina o lixo de memória.
+    sub r8, '0'
+    imul rax, 10
+    add rax, r8; 0*10 + primeiro algarismo -> p.a. * 10 + segundo alg. -> p.a.*100 + s.a. * 10 + t.a. etc. (descrição das iterações)
+    inc rcx; novo tbm. Isso incrementa o valor no registrador.
+    cmp rcx, rdi
+    jl loop01
+    ret    
