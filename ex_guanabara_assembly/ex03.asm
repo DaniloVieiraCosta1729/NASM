@@ -111,19 +111,24 @@ _start:
     
     ;cri texto (número em rdi e final do endereço em rsi)
 criaTexto:
-    mov rbx, 10
-    mov rax, rdi
-    xor rcx, rcx
-    loopDivisao:
-        add rcx, 1
-        xor rdx, rdx
-        div rbx
-        add rdx, '0'
-        mov [rsi], rdx
-        dec rsi
-        test rax, rax
-        jnz loopDivisao
+    mov rbx, 10         ; divisor para extrair os dígitos
+    mov rax, rdi        ; número a ser convertido
+    xor rcx, rcx        ; contador de dígitos
+
+.loopDivisao:
+    xor rdx, rdx
+    div rbx             ; rax / 10, resto em rdx
+    add rdx, '0'        ; converte para ASCII
+    dec rsi             ; move para o caractere anterior
+    mov [rsi], dl       ; salva o caractere
+    inc rcx             ; incrementa o número de dígitos
+    test rax, rax
+    jnz .loopDivisao
+
+    ; agora rsi aponta para o início da string
+    ; rcx contém o número de caracteres
     mov [tamResultado], rcx
+    mov rax, rsi        ; retorna o ponteiro da string gerada em rax
     ret
 
     ; criar numero (endereço em rsi e tamanho em rdi)
