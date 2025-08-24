@@ -1,0 +1,16 @@
+Esse arquivo relato o processo de aprendizado durante a escrita das soluções. 
+
+;;; EX03
+Há dois arquivos para esse problema e o motivo disso é que o primeiro ficou muito bagunçado, declarando todas as funções diretamente nele e contendo muitos comentários. Esse primeiro não funcionou. Através do GDB eu vi que tudo ocorre bem até o momento de ler os dados do resultado. Não consegui entender bem o que estava acontecendo de errado ali.
+
+Na segunda tentativa eu decidi refazer o código do zero e separar as funções que transformam o texto em número e o número em texto em arquivos diferentes.
+Pelo gdb, confirmei que a primeira função está funcionando bem, mas após adicionar a segunda e tentar executar o código, recebo um erro de segmentation fault.
+Esse erro parece ser na etapa de ler o resultado. Vou debugar novamente e tentar entender qual é o erro.
+
+-- debug
+Coloquei os inputs 30 e 23, e estou vendo que o código transformou essas sequências de bytes para números corretamente e os somou com sucesso. O valor 53 está em rax;
+A função num_string entra fica presa em um loop infinito. Quando eu faço test rax, rax, na sequência, eu incremento o r8d. Talvez algo altere a flag zero nesse meio tempo, porque o jnz continua pulando para o início do loop. 
+    Vou inverter o inc r8d e o test rax, rax de lugar.
+    Deu certo! Não sei o motivo ainda, mas funcionou. Olhei o endereço e agora sim eu vejo os caracteres no endereço onde n3 está armazenado. 
+    Algo estranho acontece em seguida. Eu vejo que rcx (que deveria guardar a quantidade de iterações da função anterior), mas o valor nele é muito grande, provavelmente um endereço. Isso explica o segmentation fault...
+    Deu certo!

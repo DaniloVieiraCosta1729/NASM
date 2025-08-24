@@ -1,4 +1,5 @@
 section .text
+global string_num
 
 ; converte string para numero
 ; rdi = endereço do buffer
@@ -6,17 +7,17 @@ section .text
 ; usa o ecx como iterador
 ; retorna em eax
 
-num_string:
+string_num:
     xor eax, eax
-    xor ecx, ecx
+    xor rcx, rcx
     xor edx, edx
 
 .build_num:        ; o . antes do nome do loop torna esse rotolo local.
     imul eax, 10
-    mov edx, byte [rdi + ecx]
+    mov dl, byte [rdi + rcx]
     sub edx, '0'
     add eax, edx
     inc ecx
-    cmp esi, ecx
-    jl build_num
+    cmp ecx, esi
+    jl .build_num
     ret
