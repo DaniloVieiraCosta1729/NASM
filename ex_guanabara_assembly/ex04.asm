@@ -18,6 +18,7 @@ section .data
     tam_msg4 equ $-msg4
 
     msg5 db "O input nao eh nada."
+    tam_msg5 equ $-msg5
 
 section .bss
     resposta resb 50
@@ -46,8 +47,8 @@ _start:
     mov [tamResposta], al
 
     ; vamos marcar todos os campos com 0 para indicar que a entrada não é de nenhum tipo.
-    mov [alfa], 0
-    mov [num], 0    
+    mov byte [alfa], 0
+    mov byte [num], 0    
     ;agora vamos percorrer o buffer.
     mov rsi, resposta
     xor rcx, rcx
@@ -116,13 +117,13 @@ _start:
 
     .seNumero:
     ; se rax = 2
-    mov [num], 1
+    mov byte [num], 1
     inc cl
     jmp .loop00
 
     .seLetra:
     ; se rax = 1
-    mov [alfa], 1
+    mov byte [alfa], 1
     inc cl
     jmp .loop00
 
