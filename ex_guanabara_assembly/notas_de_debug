@@ -18,3 +18,20 @@ Esse arquivo relato o processo de aprendizado durante a escrita das soluções.
         Após resolver o problema eu vi no livro "x86-64 Assembly programming language with Ubuntu, Ed Jorgensen" que a CPU atualiza o registrador rFlag a cada instrução, e isso justifica o problema.
 
 ;;; EX04
+    Além de debug, vou usar esse arquivo para fazer comentários.
+    Na tabela ASCII vemos que os digitos estão entre 48 e 57;
+    Letras estão entre 65 e 122 (de 91 até 96, não há letras)
+
+    A estratégia vai ser bem simples. Vou percorrer fazer dois testes, um para verificar a existência de algarismos e outro, para a existência de letras;
+    Temos as seguintes preposições:
+    N1: x >=48
+    N2: x <= 57
+    N1 and N2 = é numérico = N
+
+    A1: x >= 65
+    A2: x <= 90
+    A3: x >= 97
+    A4: x <= 122
+    (A1 and A2) or (A3 and A4) = é alfabético = A
+
+    A and N = AN = é alfanumerico
