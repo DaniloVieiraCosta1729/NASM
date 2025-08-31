@@ -35,3 +35,15 @@ Esse arquivo relato o processo de aprendizado durante a escrita das soluções.
     (A1 and A2) or (A3 and A4) = é alfabético = A
 
     A and N = AN = é alfanumerico
+
+    Acabou que eu fiz algo nem mais improvisado e não segui o que está aqui. O problema foi bem mais suave que o anterior, mas ainda tive um problema. 
+    Eu havia entendido errado o comportamento de test. No GDB, percebi que o programa estava funcionando perfeitamente, exceto pelo detalhe da flag ZF estar sempre ativa após o test al, bl. Isso acontece porque test x, y sempre ativa ZF, exceto quando x e y são ambos diferentes de zero.
+
+;;; EX05    
+
+    As funções que transformam cadeia de caracteres em números e vice-versa já foram escritas, mas como o objetivo é praticar e como elas me deram certa dor de cabeça, vamos reimplementar sem olhar as funções do ex03.
+    
+;;; EX06 
+    Tá funcionando mais ou menos. Ele responde o que deve, mas printa um 4 e dá um erro de segmentation fault no final.
+    Todos os exercícios foram 100% autorais, mas os 2 e 3 eu precisei de dicas e o 4 eu pedi revisões, mas todo o código e ideias usadas no ex04 foram originais.
+    O ex05 é o primeiro que faço completamente sem usar nenhum tipo de ajuda externa, consegui ir digitando do início ao fim sem nem pedir revisão e consertei o problema analisando a depuração. Então esse exercício é um ponto interessante nesse miniprojeto de aprendizado do básico de assembly. 
