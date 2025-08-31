@@ -8,16 +8,16 @@ section .data
     msg1 db "Digite algo: "
     tam_msg1 equ $-msg1
 
-    msg2 db "O input eh alfabetico."
+    msg2 db "O input eh alfabetico.",10
     tam_msg2 equ $-msg2
 
-    msg3 db "O input eh numerico."
+    msg3 db "O input eh numerico.",10
     tam_msg3 equ $-msg3
 
-    msg4 db "O input eh alfanumerico."
+    msg4 db "O input eh alfanumerico.",10
     tam_msg4 equ $-msg4
 
-    msg5 db "O input nao eh nada."
+    msg5 db "O input nao eh nada.",10
     tam_msg5 equ $-msg5
 
 section .bss
@@ -44,11 +44,14 @@ _start:
     mov rdx, 50
     syscall
 
+    dec rax
+
     mov [tamResposta], al
 
     ; vamos marcar todos os campos com 0 para indicar que a entrada não é de nenhum tipo.
     mov byte [alfa], 0
     mov byte [num], 0    
+
     ;agora vamos percorrer o buffer.
     mov rsi, resposta
     xor rcx, rcx
@@ -65,7 +68,9 @@ _start:
     mov al, [num]
     mov bl, [alfa]
     
-    test al, bl
+    mov cl, al
+    add cl, bl
+    test cl, cl
     jz .mostraNada
 
     cmp al, 1
@@ -108,6 +113,7 @@ _start:
 
     .alimentaDecisao:
     call verifica
+    inc rsi
     cmp rax, 2
     je .seNumero
     cmp rax, 1

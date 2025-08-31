@@ -32,4 +32,3 @@ verifica:
    .nada:
    mov rax, 0
    ret
-
