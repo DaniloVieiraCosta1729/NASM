@@ -42,8 +42,14 @@ Esse arquivo relato o processo de aprendizado durante a escrita das soluções.
 ;;; EX05    
 
     As funções que transformam cadeia de caracteres em números e vice-versa já foram escritas, mas como o objetivo é praticar e como elas me deram certa dor de cabeça, vamos reimplementar sem olhar as funções do ex03.
-    
-;;; EX06 
+
     Tá funcionando mais ou menos. Ele responde o que deve, mas printa um 4 e dá um erro de segmentation fault no final.
     Todos os exercícios foram 100% autorais, mas os 2 e 3 eu precisei de dicas e o 4 eu pedi revisões, mas todo o código e ideias usadas no ex04 foram originais.
     O ex05 é o primeiro que faço completamente sem usar nenhum tipo de ajuda externa, consegui ir digitando do início ao fim sem nem pedir revisão e consertei o problema analisando a depuração. Então esse exercício é um ponto interessante nesse miniprojeto de aprendizado do básico de assembly. 
+    
+;;; EX06 
+    Vou fazer duas versões: 
+    1º Versão que usa todos os recursos disponíveis para facilitar o trabalho de escrita de código e de performance (scanf + printf + sqrtss);
+    2º Versão vou implementar o logaritmo, encontrar uma função que seja assintoticamente próxima da raiz quadrada para que possamos implementar e calcular a raiz quadrada usando newton raphson, usar as syscall read e write para IO, implementar um parser de cadeia de caracteres para float (IEEE 754).
+    Acho que a as duas abordagens vão ser bem interessantes, embora, claro, a segunda seja mais atrativa. 
+    Aqui é o primeiro contato com os registradores para trabalhar com ponto flutuante e SIMD.
