@@ -23,6 +23,6 @@ main:
     add rsp,8
     ret
 
-    section .note.GNU-stack noalloc noexec nowrite ; seção para o linker parar de chorar.
+    section .note.GNU-stack noalloc noexec nowrite ; seção para o linker parar de chorar. Preciso pequisar mais a fundo sobre ela.
 
     ; observações interessantes sobre assembly montado pelo gcc: usamos main como entrada; ret da main já encerra o programa.
