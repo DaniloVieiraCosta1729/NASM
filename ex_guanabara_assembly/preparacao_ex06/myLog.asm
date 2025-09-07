@@ -3,9 +3,7 @@
 
 section .data
     extrai dq 0b011111111111
-
-    lg_e dq 1.442695040888963407
-
+    
 section .text
     global lg
     global ln
