@@ -1,48 +1,51 @@
 section .note.GNU-stack noalloc noexec nowrite
 
-extern ps2d
-extern exp
 extern printf
+extern ln
+extern exp
+extern ps2d
+extern approx
 
 section .data
 
     msg1 db "Digite um numero: "
     tamMsg1 equ $-msg1
 
-    teste db "num = %lf",10,0
-
-    valorTeste dq 10.0
+    msg2 db "A raiz de %0.3lf eh: %0.5lf",10,0
 
 section .bss
 
-    buffer resb 50
+    num resb 30
 
 section .text
     global main
 
 main:
 
-    ; vamos fazer o input com a syscall read e chamar ps2d em seguida.
     mov rax, 1
     mov rdi, 1
     mov rsi, msg1
     mov rdx, tamMsg1
-    syscall
+    syscall   
 
     mov rax, 0
     mov rdi, 0
-    mov rsi, buffer
-    mov rdx, 50
+    mov rsi, num
+    mov rdx, 30
     syscall
 
-    mov rdi, buffer
+    mov rdi, num
     call ps2d
+    movsd xmm4, xmm0
+    call approx
 
-    call exp
-    
+    movsd xmm1, xmm0
+    movsd xmm0, xmm4
+
     sub rsp, 8
-    mov rdi, teste
-    mov al, 1
+    mov rdi, msg2
+    mov al, 2
     call printf
     add rsp, 8
+
     ret
