@@ -1,0 +1,2 @@
+Texto para testar o IO com NASM.
+O objetivo e usar isso no exercicio 7.
