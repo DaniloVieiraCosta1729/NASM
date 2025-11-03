@@ -72,8 +72,21 @@ endstruc
     inc rsi
 %endmacro
 
-%macro parseS2N 2; recebe o buffer com o texto e o tamanho dele
+%macro parseS2N 2; endereço do buffer, tamanho do buffer
+    xor rax, rax
+    mov rsi, 10
+    xor rdx, rdx
+    mov rcx, %2
+    lea rdi, %1
     
+    %%loop:
+    mul rax, rsi
+    mov dl, byte [rdi + %2 - rcx ]
+    add dl, '0'
+    add rax, rdx
+    dec rcx
+    cmp rcx, 0
+    jnz %%loop
 %endmacro
 
 section .data
