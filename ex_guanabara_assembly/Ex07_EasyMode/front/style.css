@@ -1,0 +1,40 @@
+.navebar{
+    background-color: rgb(12, 12, 12);
+    color: rgb(227, 211, 211);
+    padding: 0.5vh;
+    display: flex;
+    justify-content: center;
+    border-radius: 1.5vh;
+    margin-left: 20vh;
+    margin-right: 20vh;
+}
+
+.navebar a{
+    text-decoration: none;
+    color: white;
+}
+
+.navebar span{
+    margin-left: 3vh;
+    margin-right: 3vh;
+    margin-top: auto;
+    margin-bottom: auto;
+}
+
+.navebar span a:hover{
+    display: inline-block;
+    color: rgb(174, 0, 0);
+    font-weight: bolder;
+    background: radial-gradient(circle, #ffd700 0%, #ff8c00 40%, transparent 100%);
+}
+
+.navebar #about{
+    margin-right: auto;
+}
+
+.logo{
+    height: 5vh;
+    width: auto;
+    margin-right: auto;
+    margin-left: 10vh;
+}
