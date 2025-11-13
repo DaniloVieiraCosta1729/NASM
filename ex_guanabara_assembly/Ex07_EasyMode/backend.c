@@ -13,6 +13,10 @@
 #include <stdio.h>
 #include <errno.h>
 #include <string.h>
+#include <fcntl.h>
+#include <sys/stat.h>
+#include <sys/sendfile.h>
+#include <unistd.h>
 
 #define GET             0
 #define POST            1
@@ -20,10 +24,16 @@
 #define PATCH           4
 #define PUT             8
 
+#define NOTIMPLEMENTED "HTTP/1.1 501 Not Implemented\r\nContent-Type: text/plain\r\nContent-Length: 49\r\nConnection: close\r\n\r\nO método não é suportado, amigo."
+
 enum connecting {HALTED, RUNNING};
 volatile enum connecting serving = RUNNING;
 
-int servidor()
+const char * ContentType(const char *filename);
+int obtainMethod(const char * buffer);
+void handleGET(int clientFD, const char * request);
+
+int main()
 {
     int serverFD = socket(AF_INET, SOCK_STREAM, 0);
 
@@ -50,7 +60,7 @@ int servidor()
     while (serving)
     {
         int clientFD;
-        if ((clientFD = accept(serverFD, (struct sockaddr*)&clientAddr, clientLen)) < 0)
+        if ((clientFD = accept(serverFD, (struct sockaddr*)&clientAddr, (socklen_t*)&clientLen)) < 0)
         {
             perror("Accept");
             break;
@@ -58,10 +68,22 @@ int servidor()
 
         char buffer[1000];
         recv(clientFD, buffer, 999, 0);
-        buffer[1000] = '\0';
+        buffer[999] = '\0';
 
         int methodMask = obtainMethod(&buffer);
+
+        switch (methodMask)
+        {
+        case GET:
+            handleGET(clientFD, &buffer);
+            break;
         
+        default:
+            send(clientFD, NOTIMPLEMENTED, strlen(NOTIMPLEMENTED), 0);
+            break;
+        }
+
+        close(clientFD);        
     }
 
     return 0;
@@ -69,26 +91,76 @@ int servidor()
 
 int obtainMethod(const char * buffer) // não gosto da ideia de aumentar a pilha para fazer uma tarefa dessas, mas dessa vez quero manter o código o mais fácil de ler que eu puder.
 {
-    if (strncmp(buffer,"GET", 3))
+    if (!strncmp(buffer,"GET", 3))
     {
         return GET;
     }
-    if (strncmp(buffer,"POST", 4))
+    if (!strncmp(buffer,"POST", 4))
     {
         return POST;
     }
-    if (strncmp(buffer,"DELETE", 6))
+    if (!strncmp(buffer,"DELETE", 6))
     {
         return DELETE;
     }
-    if (strncmp(buffer,"PATCH", 5))
+    if (!strncmp(buffer,"PATCH", 5))
     {
         return PATCH;
     }
-    if (strncmp(buffer,"PUT", 3))
+    if (!strncmp(buffer,"PUT", 3))
     {
         return PUT;
     }
 
     return -1;    
+}
+
+void handleGET(int clientFD, const char * request)
+{
+    char * filename = request + 5;
+    filename[strcspn(filename," ")] = '\0';
+
+    char path[50];
+    sprintf(path, "./front/%s", filename);
+
+    int fileFD;
+
+    if ((fileFD = open(path, O_RDONLY)) < 0)
+    {
+        perror("Open file");
+        return;
+    }
+
+    struct stat filestatus;
+
+    fstat(fileFD, &filestatus);
+
+    char httpheader[256];
+    const char * tipo = ContentType(filename);
+
+    sprintf(httpheader, "HTTP/1.1 OK 200\r\nContent-Type: %s\r\nContent-Length: %ld\r\nConnection: close\r\n\r\n", tipo, filestatus.st_size);
+
+    send(clientFD, httpheader, strlen(httpheader), 0);
+    sendfile(clientFD, fileFD, 0, filestatus.st_size);
+
+    close(fileFD);
+
+}
+
+const char * ContentType(const char *filename)
+{
+    if (strstr(filename, ".html"))
+    {
+        return "text/html";
+    }
+    if (strstr(filename, ".css"))
+    {
+        return "text/css";
+    }
+    if (strstr(filename, ".js"))
+    {
+        return "application/javascript";
+    }
+
+    return "application/octet-stream";    
 }
