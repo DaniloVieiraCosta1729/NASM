@@ -70,12 +70,12 @@ int main()
         recv(clientFD, buffer, 999, 0);
         buffer[999] = '\0';
 
-        int methodMask = obtainMethod(&buffer);
+        int methodMask = obtainMethod(buffer);
 
         switch (methodMask)
         {
         case GET:
-            handleGET(clientFD, &buffer);
+            handleGET(clientFD, buffer);
             break;
         
         default:
@@ -128,6 +128,13 @@ void handleGET(int clientFD, const char * request)
     if ((fileFD = open(path, O_RDONLY)) < 0)
     {
         perror("Open file");
+        printf("Caminho: %s falhou.", path);
+
+        char * msg = "Arquivo não encontrado...";
+        char notFound[256];
+        sprintf(notFound, "HTTP/1.1 404 Not Found\r\nContent-Type: text/plain\r\nContent-length: %ld\r\nConnection: close\r\n\r\n%s", strlen(msg), msg);
+
+        send(clientFD, notFound, strlen(notFound), 0);
         return;
     }
 
@@ -157,9 +164,17 @@ const char * ContentType(const char *filename)
     {
         return "text/css";
     }
+    if (strstr(filename, ".png"))
+    {
+        return "image/png";
+    }
     if (strstr(filename, ".js"))
     {
         return "application/javascript";
+    }
+    if (strstr(filename, ".mp3"))
+    {
+        return "audio/mpeg";
     }
 
     return "application/octet-stream";    
