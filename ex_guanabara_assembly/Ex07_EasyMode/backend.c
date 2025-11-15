@@ -66,9 +66,11 @@ int main()
             break;
         }
 
-        char buffer[1000];
-        recv(clientFD, buffer, 999, 0);
-        buffer[999] = '\0';
+        char buffer[8200];
+        recv(clientFD, buffer, 8200, 0);
+        buffer[8199] = '\0';
+        printf("REQ:\n%s\n", buffer);
+
 
         int methodMask = obtainMethod(buffer);
 
@@ -146,7 +148,7 @@ void handleGET(int clientFD, char * request)
     char httpheader[256];
     const char * tipo = ContentType(filename);
 
-    sprintf(httpheader, "HTTP/1.1 OK 200\r\nContent-Type: %s\r\nContent-Length: %ld\r\nConnection: close\r\n\r\n", tipo, filestatus.st_size);
+    sprintf(httpheader, "HTTP/1.1 200 OK\r\nContent-Type: %s\r\nContent-Length: %ld\r\nConnection: close\r\n\r\n", tipo, filestatus.st_size);
 
     send(clientFD, httpheader, strlen(httpheader), 0);
     sendfile(clientFD, fileFD, 0, filestatus.st_size);
