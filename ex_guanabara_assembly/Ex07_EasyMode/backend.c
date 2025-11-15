@@ -29,9 +29,9 @@
 enum connecting {HALTED, RUNNING};
 volatile enum connecting serving = RUNNING;
 
-const char * ContentType(const char *filename);
+const char * ContentType(char *filename);
 int obtainMethod(const char * buffer);
-void handleGET(int clientFD, const char * request);
+void handleGET(int clientFD, char * request);
 
 int main()
 {
@@ -79,6 +79,7 @@ int main()
             break;
         
         default:
+            printf("\nRequisicao: %s", buffer);
             send(clientFD, NOTIMPLEMENTED, strlen(NOTIMPLEMENTED), 0);
             break;
         }
@@ -115,7 +116,7 @@ int obtainMethod(const char * buffer) // não gosto da ideia de aumentar a pilha
     return -1;    
 }
 
-void handleGET(int clientFD, const char * request)
+void handleGET(int clientFD, char * request)
 {
     char * filename = request + 5;
     filename[strcspn(filename," ")] = '\0';
@@ -154,7 +155,7 @@ void handleGET(int clientFD, const char * request)
 
 }
 
-const char * ContentType(const char *filename)
+const char * ContentType(char *filename)
 {
     if (strstr(filename, ".html"))
     {
