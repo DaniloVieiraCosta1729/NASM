@@ -4,6 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="shortcut icon" href="logo.png" type="image/x-icon">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Momo+Trust+Display&family=Rubik:ital,wght@0,300..900;1,300..900&display=swap" rel="stylesheet">
+
     <link rel="stylesheet" href="style.css">
 
     <title>HOME - Class Manager</title>
@@ -12,19 +17,21 @@
     <header>
         <div class="navebar">
             <img src="logo.png" alt="" class="logo">
-            <span><a href="#">HOME</a></span>
+            <span><a href="index.html">HOME</a></span>
             <span><a href="https://www.youtube.com" target="_blank">Login</a></span>
             <span><a href="www.github.com" target="_blank">Contact</a></span>
             <span id="about"><a href="www.linkedin.com" target="_blank">About</a></span>
         </div>
     </header>
     <section class="content">
-        <div class="sidebar">
+        <div class="sidebar" id="sidebar">
             <audio id="ratinho" src="iiirrraaaaaaa.mp3"></audio>
-            <li><button type="submit" onclick="document.getElementById('ratinho').play()">CREATE</button></li>
-            <li><button type="submit">READ</button></li>
-            <li><button type="submit">UPDATE</button></li>
-            <li><button type="submit">DELETE</button></li>            
+            <li><button type="submit" onclick="document.getElementById('ratinho').play();">CREATE</button></li>
+            <audio src="devolva.mp3" id="devolva"></audio>
+            <li><button type="submit" onclick="document.getElementById('devolva').play(); atributeScore(); readBG();">READ</button></li>
+            <audio src="recebe_do_brasil.mp3" id="receba"></audio>
+            <li><button type="submit" onclick="atributeScore(); document.getElementById('receba').play(); updateBG();">UPDATE</button></li>
+            <li><button type="submit" onclick="deleteBG()">DELETE</button></li>            
         </div>
         <section class="application">
             <div class="presentation">
@@ -35,10 +42,62 @@
                     O Class Manager é uma ferramenta que permite ao professor registrar e produzir relatórios de rendimento de suas turmas.
                 </p>
             </div>
-            <div class="manager">
-            
+            <div id="manager">
+                <h2>
+                    Selecione a Ação na barra lateral
+                </h2>
+                <div id="manageraction">
+                    <form action="createStudent" method="post">
+                        <label for="nome">Nome:</label>
+                        <input type="text" name="nome" id="nome" required>
+                        
+                        <button type="submit">Enviar</button>
+                    </form>
+                </div>       
             </div>
         </section>
     </section>
 </body>
+<script>
+    function createStudents() {
+        document.getElementById('manageraction').innerHTML = `
+            <form action="createStudent" method="post">
+                <label for="nome">Nome:</label>
+                <input type="text" name="nome" id="nome" required>
+
+                <button type="submit">Enviar</button>
+            </form>
+        `;
+    };
+
+    function atributeScore(){
+        document.getElementById('manageraction').innerHTML = `
+             <div class="atributeScore">
+                <form action="createStudent" method="post">
+                <label for="note1">Nota 1</label>
+                <input type="number" name="nota1" id="nota1" required>
+
+                <label for="note2">Nota 2</label>
+                <input type="number" name="nota2" id="nota2" required>
+
+                <label for="note3">Nota 3</label>
+                <input type="number" name="nota3" id="nota3" required>
+
+                <button type="submit">Enviar</button>
+                </form>
+            </div>
+        `;
+    };
+
+    function readBG() {
+        document.getElementById('sidebar').classList.toggle('readBG');
+    };
+    function updateBG() {
+        document.getElementById('sidebar').classList.toggle('updateBG');
+    };
+
+    function deleteBG(){
+        document.getElementById('sidebar').classList.toggle('deleteBG')
+    };
+</script>
 </html>
