@@ -17,6 +17,7 @@
 #include <sys/stat.h>
 #include <sys/sendfile.h>
 #include <unistd.h>
+#include <stdlib.h>
 
 #define GET             0
 #define POST            1
@@ -24,7 +25,7 @@
 #define PATCH           4
 #define PUT             8
 
-#define NOTIMPLEMENTED "HTTP/1.1 501 Not Implemented\r\nContent-Type: text/plain\r\nContent-Length: 49\r\nConnection: close\r\n\r\nO método não é suportado, amigo."
+#define NOTIMPLEMENTED "HTTP/1.1 501 Not Implemented\r\nContent-Type: text/plain\r\nContent-Length: 49\r\nConnection: close\r\n\r\nO metodo nao e suportado, amigo."
 
 enum connecting {HALTED, RUNNING};
 volatile enum connecting serving = RUNNING;
@@ -32,6 +33,7 @@ volatile enum connecting serving = RUNNING;
 const char * ContentType(char *filename);
 int obtainMethod(const char * buffer);
 void handleGET(int clientFD, char * request);
+void handlePOST(int clientFD, char * request);
 
 int main()
 {
@@ -66,9 +68,9 @@ int main()
             break;
         }
 
-        char buffer[8200];
-        recv(clientFD, buffer, 8200, 0);
-        buffer[8199] = '\0';
+        char buffer[3000];
+        recv(clientFD, buffer, 3000, 0);
+        buffer[2999] = '\0';
         printf("REQ:\n%s\n", buffer);
 
 
@@ -79,6 +81,10 @@ int main()
         case GET:
             handleGET(clientFD, buffer);
             break;
+
+        case POST:
+            handlePOST(clientFD, buffer);
+            break;        
         
         default:
             printf("\nRequisicao: %s", buffer);
@@ -155,6 +161,71 @@ void handleGET(int clientFD, char * request)
 
     close(fileFD);
 
+}
+
+void handlePOST(int clientFD, char * request)
+{
+    int length;
+
+    char * contetLength = strstr(request, "Content-Length: ");
+
+    if (!contetLength)
+    {
+        printf("Nao ha content-length.");
+        return;
+    }
+
+    sscanf(contetLength, "Content-Length: %d", &length);
+
+    char * body = strstr(request, "\r\n\r\n");
+
+    if (!body)
+    {
+        printf("Esse request ta podre. Nao tem final o trem!!");
+        return;
+    }
+
+    body += 4;
+
+    if ((int)strlen(body) < length) // body tem quase 3k de tamanho, mas isso n é um problema nesse caso. Vamos fazer a validacao por motivos de porque sim.
+    {
+        printf("Eu prefiro o resquest inteiro do o request todo! - Chaves");
+        return;
+    }
+
+    // essa vai ser, praticamente, a primeira vez que aloco memória em um projeto. 
+
+    char * data = (char *)malloc(length + 1);
+
+    if (!data)
+    {
+        printf("Problema na alocação de memória do body no handler do POST.");
+        return;
+    }
+
+    memcpy(data, body, length);    
+
+    data[length] = '\0';
+
+    char * nome = (char *)malloc(strcspn(data, "&"));
+    memcpy(nome, data, strcspn(data, "&") + 1);
+    nome[strcspn(data, "&")] = '\0';
+
+    char * cpf = strchr(data, '&') + 1;
+
+    char msg[256];
+    sprintf(msg,"o nome do aluno e: %s\n\no cpf do aluno e: %s", nome, cpf);
+
+    printf("%s\n", msg);
+
+    char httpHeader[512];
+
+    sprintf(httpHeader, "HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: %ld\r\nConnection: close\r\n\r\n%s", strlen(msg), msg);
+
+    send(clientFD, httpHeader, strlen(httpHeader), 0);
+
+    free(data);
+    free(nome);
 }
 
 const char * ContentType(char *filename)
