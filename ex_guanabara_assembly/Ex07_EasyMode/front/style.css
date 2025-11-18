@@ -3,16 +3,18 @@ body{
     display: flex;
     flex-direction: column;
     height: 100vh;
+    padding: 0;
+    background-color: #ffffff;
 }
 
 header{
     padding: 15px;
-    background-color: #b0aeab;
+    background-color: #eb5e28;
 }
 .navebar{
     box-shadow: inset;
-    background-color: rgb(12, 12, 12, 50%);
-    color: rgb(227, 211, 211);
+    background-color: #252422;
+    color: #fffcf2;
     padding: 0.5vh;
     display: flex;
     justify-content: center;
@@ -23,7 +25,7 @@ header{
 
 .navebar a{
     text-decoration: none;
-    color: white;
+    color: #fffcf2;
 }
 
 .navebar span{
@@ -35,8 +37,7 @@ header{
 
 .navebar span a:hover{
     display: inline-block;
-    color: rgb(0, 0, 0);
-    background: radial-gradient(circle, #7e7d78 0%, #ffffff 40%, transparent 100%);
+    color: rgb(244, 100, 100);
 }
 
 .navebar #about{
@@ -93,17 +94,22 @@ header{
 .createBG{
     background-image: url(createbg.png);
 }
+button{
+    font-family: "Orbitron", sans-serif;
+}
 
 .sidebar li button{
     display: flex;
-    background-color: rgba(3, 53, 3, 0.795);
-    color: white;
+    background-color: #252422;
+    color: #fffcf2;
+    font-family: "Orbitron", sans-serif;;
     font-weight: 400;
     width: 30vh;
-    padding: 0.5vh;
-    margin: 1vh;
+    padding: 1vh;
+    margin: 0.5vh;
     border-radius: 0.5vh;
     border-style: none;
+    font-weight: 600;
     justify-content: center;
     transition: transform 0.5s ease;
 }
@@ -115,11 +121,34 @@ header{
 
 #manager{
     padding: 2vh;
-    background-color: #7e7d78;
+    background-color: #403d39;
     display: flex;
     flex-direction: column;
+    position: relative;
     text-align: center;
-    color: white;
+    color: #fffcf2;
+}
+
+#popupCreated{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 2vh;
+    padding: 2vh;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    top: -30px;
+    transition: all 0.3s ease;
+}
+.popupCreatedInvisivel{
+    background-color: rgba(255, 255, 255, 0);
+    color: rgba(255, 255, 255, 0);
+}
+.popupCreated{
+    background-color: #eb5f28dd;
+    color: #252422;
+    top: 20px;
 }
 
 .atributeScore{
@@ -133,8 +162,44 @@ form{
     display: flex;
     flex-direction: column;
 }
+
+label{
+    color: #eb5e28;
+    font-weight: 500;
+    font-family: "Playwrite HU", cursive;
+    margin-left: 1vh;
+    margin-right: auto;
+}
+.createForm input{
+    padding: 0.6vh;
+    margin-bottom: 1vh;
+}
+
+.createForm input:focus{
+    outline: none;
+    border-style: ridge;
+    border-color: #eb5e28;
+}
+
+.createForm button{
+    margin: none;
+    padding: 0.6vh;
+    font-family: "Orbitron", sans-serif;
+}
+
 .atributeScore input{
     width: auto;
     margin: 0.3vh;
     margin-bottom: 2vh;
+}
+
+.atributeScoreForm input{
+    font-family: "Orbitron", sans-serif;
+}
+
+.atributeScoreForm input:focus{
+    outline: none;
+    border-style: ridge;
+    border-color: #eb5e28;
+    font-family: "Orbitron", sans-serif;
 }
