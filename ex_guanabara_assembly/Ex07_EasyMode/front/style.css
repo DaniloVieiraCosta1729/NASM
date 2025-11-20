@@ -5,11 +5,14 @@ body{
     height: 100vh;
     padding: 0;
     background-color: #ffffff;
+    margin: 0;
 }
 
 header{
     padding: 15px;
     background-color: #eb5e28;
+    position: fixed;
+    width: 100%;
 }
 .navebar{
     box-shadow: inset;
@@ -66,7 +69,8 @@ header{
 .sidebar{
     list-style: none;
     width: 30%;
-    background-image: url(bloodborne_sidebar.png);
+    background-image: url(home.png);
+    background-size: cover;
     margin: 1vh;
     padding: 1vh;
     display: flex;
@@ -81,18 +85,22 @@ header{
 
 .readBG{
     background-image: url(bg2.png);
+    background-size: cover;
 }
 
 .updateBG{
     background-image: url(createbg.png);
+    background-size: cover;
 }
 
 .deleteBG{
     background-image: url(bgdelete.png);
+    background-size: cover;
 }
 
 .createBG{
     background-image: url(createbg.png);
+    background-size: cover;
 }
 button{
     font-family: "Orbitron", sans-serif;

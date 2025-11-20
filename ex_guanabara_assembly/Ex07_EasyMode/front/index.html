@@ -14,7 +14,7 @@
     <title>HOME - Class Manager</title>
 </head>
 <body>
-    <header>
+    <header id="cabecalho">
         <div class="navebar">
             <img src="logoCM.png" alt="" class="logo">
             <span><a href="index.html">HOME</a></span>
@@ -23,10 +23,10 @@
             <span id="about"><a href="https://www.linkedin.com" target="_blank">ABOUT</a></span>
         </div>
     </header>
-    <section class="content">
+    <section class="content" id="contentBody">
         <div class="sidebar" id="sidebar">
             <audio id="ratinho" src="iiirrraaaaaaa.mp3"></audio>
-            <li><button type="submit" onclick="document.getElementById('ratinho').play(); createStudents();">CREATE</button></li>
+            <li><button type="submit" onclick="document.getElementById('ratinho').play(); createBG(); createStudents();">CREATE</button></li>
 
 
             <audio src="devolva.mp3" id="devolva"></audio>
@@ -36,8 +36,8 @@
             <audio src="recebe_do_brasil.mp3" id="receba"></audio>
             <li><button type="submit" onclick="atributeScore(); document.getElementById('receba').play(); updateBG();">UPDATE</button></li>
 
-
-            <li><button type="submit" onclick="deleteBG(); deleteStudent();">DELETE</button></li>            
+            <audio src="laranjinha.mp3" id="laranjinha"></audio>
+            <li><button type="submit" onclick="deleteBG(); document.getElementById('laranjinha').play();deleteStudent();">DELETE</button></li>            
         </div>
         <section class="application">
             <div class="presentation">
@@ -63,7 +63,10 @@
                         <label for="cpf">CPF</label>
                         <input type="text" name="cpf" id="cpf">
                         
-                        <button type="button" onclick="novoAluno()">Enviar</button>
+                        <span id="tome">
+                            <audio src="gangster_receba.mp3" id="audioEnviar"></audio>
+                        </span>
+                        <button type="button" onclick="tome(); novoAluno();">Enviar</button>
                     </form>
                 </div>       
             </div>
@@ -71,6 +74,9 @@
     </section>
 </body>
 <script>
+
+    let tomeCounter = 0;
+
     function createStudents() {
         document.getElementById('manageraction').innerHTML = `
             <form action="createStudent" method="post" class="createForm">
@@ -80,7 +86,10 @@
                 <label for="cpf">CPF</label>
                 <input type="text" name="cpf" id="cpf">
                         
-                <button type="button" onclick="novoAluno()">Enviar</button>
+                <span id="tome">
+                    <audio src="gangster_receba.mp3" id="audioEnviar"></audio>
+                </span>
+                <button type="button" onclick="tome(); novoAluno();">Enviar</button>
             </form>
         `;
     };
@@ -115,14 +124,21 @@
     }
 
     function readBG() {
+        document.getElementById('sidebar').classList.remove('readBG', 'updateBG', 'deleteBG');
         document.getElementById('sidebar').classList.toggle('readBG');
     };
     function updateBG() {
+        document.getElementById('sidebar').classList.remove('readBG', 'updateBG', 'deleteBG');
         document.getElementById('sidebar').classList.toggle('updateBG');
     };
 
     function deleteBG(){
+        document.getElementById('sidebar').classList.remove('readBG', 'updateBG', 'deleteBG');
         document.getElementById('sidebar').classList.toggle('deleteBG')
+    };
+
+    function createBG() {
+        document.getElementById('sidebar').classList.remove('readBG', 'updateBG', 'deleteBG');
     };
 
     function novoAluno(){
@@ -154,7 +170,43 @@
         setTimeout(() => {
             pop.classList.toggle("popupCreated");
         }, 2000);
-}
+    };
+
+    function tome(){
+        const c = tomeCounter % 2;
+        tomeCounter++;
+
+        switch (c) {
+            case 0:
+                document.getElementById('tome').innerHTML = `
+                    <audio src="gangster_receba.mp3" id="audioEnviar"></audio>
+                `;
+                break;
+        
+            case 1:
+                document.getElementById('tome').innerHTML = `
+                    <audio src="tome.mp3" id="audioEnviar"></audio>
+                `;
+                break;
+        
+            default:
+                break;
+        }
+
+        document.getElementById('audioEnviar').play();
+    }
+
+    function navbar(){
+        // essa função só coloca um padding-top no conteúdo para ele não ficar atrás da barra de navegação.
+
+        const navbar = document.getElementById('cabecalho');
+        const altura = navbar.offsetHeight;
+
+        document.getElementById('contentBody').style.paddingTop = altura + "px";
+    }
+
+    window.addEventListener("load", navbar);
+    window.addEventListener("resize", navbar);
 
 </script>
 </html>
