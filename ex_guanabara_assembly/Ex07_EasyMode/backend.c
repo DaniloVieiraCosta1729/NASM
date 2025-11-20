@@ -18,6 +18,9 @@
 #include <sys/sendfile.h>
 #include <unistd.h>
 #include <stdlib.h>
+#include <sqlite3.h>
+#include <pthread.h>
+#include <stdint.h>
 
 #define GET             0
 #define POST            1
@@ -27,16 +30,36 @@
 
 #define NOTIMPLEMENTED "HTTP/1.1 501 Not Implemented\r\nContent-Type: text/plain\r\nContent-Length: 49\r\nConnection: close\r\n\r\nO metodo nao e suportado, amigo."
 
+typedef struct {
+    char name[64];
+    char cpf[16];
+    int8_t score1;
+    int8_t score2;
+    int8_t score3;
+} student;
+
+typedef struct
+{
+    student learner;
+    sqlite3 * db;
+} containerTask;
+
+
 enum connecting {HALTED, RUNNING};
 volatile enum connecting serving = RUNNING;
 
 const char * ContentType(char *filename);
 int obtainMethod(const char * buffer);
 void handleGET(int clientFD, char * request);
-void handlePOST(int clientFD, char * request);
+void handlePOST(int clientFD, char * request, sqlite3 * db);
+void * addStudent(void * dataTask);
+sqlite3 * dbOpen();
 
 int main()
 {
+    sqlite3 * db = dbOpen();
+    pthread_t threadTarefa;
+
     int serverFD = socket(AF_INET, SOCK_STREAM, 0);
 
     struct sockaddr_in serverAddr;
@@ -83,7 +106,7 @@ int main()
             break;
 
         case POST:
-            handlePOST(clientFD, buffer);
+            handlePOST(clientFD, buffer, db);
             break;        
         
         default:
@@ -163,7 +186,7 @@ void handleGET(int clientFD, char * request)
 
 }
 
-void handlePOST(int clientFD, char * request)
+void handlePOST(int clientFD, char * request, sqlite3 * db)
 {
     int length;
 
@@ -213,6 +236,20 @@ void handlePOST(int clientFD, char * request)
 
     char * cpf = strchr(data, '&') + 1;
 
+    student learner;
+    strcpy(learner.name, nome);
+    strcpy(learner.cpf, cpf);
+    
+    containerTask * pacote = (containerTask*)malloc(sizeof(containerTask));
+    pacote->db = db;
+    pacote->learner = learner;
+
+    pthread_t threadTask;
+
+    pthread_create(&threadTask,NULL, addStudent, pacote);
+
+    pthread_detach(threadTask);
+
     char msg[256];
     sprintf(msg,"o nome do aluno e: %s\n\no cpf do aluno e: %s", nome, cpf);
 
@@ -222,7 +259,7 @@ void handlePOST(int clientFD, char * request)
 
     sprintf(httpHeader, "HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: %ld\r\nConnection: close\r\n\r\n%s", strlen(msg), msg);
 
-    send(clientFD, httpHeader, strlen(httpHeader), 0);
+    send(clientFD, httpHeader, strlen(httpHeader), 0);    
 
     free(data);
     free(nome);
@@ -252,4 +289,40 @@ const char * ContentType(char *filename)
     }
 
     return "application/octet-stream";    
+}
+
+sqlite3 * dbOpen()
+{
+    sqlite3 * db;
+    
+    int r = sqlite3_open("classManager.db", &db);
+
+    if (r != SQLITE_OK)
+    {
+        fprintf(stderr, "Algum coisa de errado não deu nada certo na hora de abrir o banco..\nO erro foi: %s\n", sqlite3_errmsg(db));
+        return NULL;
+    }
+    
+    printf("Banco aberto.");
+
+    sqlite3_exec(db,"CREATE TABLE IF NOT EXISTS students(id integer primary key, name text not null, cpf text not null, score1 integer, score2 integer, score3 integer);",NULL, 0, 0);
+
+    return db;
+}
+
+void * addStudent(void * dataTask)
+{
+    containerTask * data = (containerTask *)dataTask;
+    student learner = data->learner;
+    sqlite3 * db = data->db;
+
+    char sql[256];
+
+    sprintf(sql, "INSERT INTO STUDENTS (name, cpf) VALUES ('%s','%s');", learner.name, learner.cpf);
+    
+    sqlite3_exec(db, sql, NULL, 0, 0);
+
+    free(data);
+
+    return NULL;    
 }
