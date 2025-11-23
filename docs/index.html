@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="logoCM.png" type="image/x-icon">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Momo+Trust+Display&family=Orbitron:wght@400..900&family=Playwrite+HU:wght@100..400&family=Rubik:ital,wght@0,300..900;1,300..900&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="style.css">
+
+    <title>HOME - Class Manager</title>
+</head>
+<body>
+    <header id="cabecalho">
+        <div class="navebar">
+            <img src="logoCM.png" alt="" class="logo">
+            <span><a href="index.html">HOME</a></span>
+            <span><a href="https://www.youtube.com" target="_blank">LOGIN</a></span>
+            <span><a href="https://www.github.com" target="_blank">CONTACT</a></span>
+            <span id="about"><a href="https://www.linkedin.com" target="_blank">ABOUT</a></span>
+        </div>
+    </header>
+    <section class="content" id="contentBody">
+        <div class="sidebar" id="sidebar">
+            <audio id="ratinho" src="iiirrraaaaaaa.mp3"></audio>
+            <li><button type="submit" onclick="document.getElementById('ratinho').play(); createBG(); createStudents();">CREATE</button></li>
+
+
+            <audio src="devolva.mp3" id="devolva"></audio>
+            <li><button type="submit" onclick="document.getElementById('devolva').play(); readResults(); readBG();">READ</button></li>
+
+
+            <audio src="recebe_do_brasil.mp3" id="receba"></audio>
+            <li><button type="submit" onclick="atributeScore(); document.getElementById('receba').play(); updateBG();">UPDATE</button></li>
+
+            <audio src="laranjinha.mp3" id="laranjinha"></audio>
+            <li><button type="submit" onclick="deleteBG(); document.getElementById('laranjinha').play();deleteStudent();">DELETE</button></li>            
+        </div>
+        <section class="application">
+            <div class="presentation">
+                <h1>
+                    Class Manager
+                </h1>
+                <p>
+                    O Class Manager é uma ferramenta que permite ao professor registrar e produzir relatórios de rendimento de suas turmas.
+                </p>
+            </div>
+            <div id="manager">
+                <h2>
+                    Selecione a Ação na barra lateral
+                </h2>
+                <div id="popupCreated" class="popupCreatedInvisivel">
+                    <h2>O aluno ALUNO foi registrado com sucesso.</h2>
+                </div>
+                <div id="manageraction">
+                    <form action="createStudent" method="post" class="createForm">
+                        <label for="nome">Nome</label>
+                        <input type="text" name="nome" id="nome" required>
+
+                        <label for="cpf">CPF</label>
+                        <input type="text" name="cpf" id="cpf">
+                        
+                        <span id="tome">
+                            <audio src="gangster_receba.mp3" id="audioEnviar"></audio>
+                        </span>
+                        <button type="button" onclick="tome(); novoAluno();">Enviar</button>
+                    </form>
+                </div>       
+            </div>
+        </section>
+    </section>
+</body>
+<script>
+
+    let tomeCounter = 0;
+
+    function createStudents() {
+        document.getElementById('manageraction').innerHTML = `
+            <form action="createStudent" method="post" class="createForm">
+                <label for="nome">Nome</label>
+                <input type="text" name="nome" id="nome" required>
+
+                <label for="cpf">CPF</label>
+                <input type="text" name="cpf" id="cpf">
+                        
+                <span id="tome">
+                    <audio src="gangster_receba.mp3" id="audioEnviar"></audio>
+                </span>
+                <button type="button" onclick="tome(); novoAluno();">Enviar</button>
+            </form>
+        `;
+    };
+
+    function atributeScore(){
+        document.getElementById('manageraction').innerHTML = `
+            <form action="atributeScore" method="post" class="createForm atributeScoreForm">
+                <label for="note1">Nota 1</label>
+                <input type="number" name="nota1" id="nota1" required>
+
+                <label for="note2">Nota 2</label>
+                <input type="number" name="nota2" id="nota2" required>
+
+                <label for="note3">Nota 3</label>
+                <input type="number" name="nota3" id="nota3" required>
+
+                <button type="submit">Enviar</button>
+            </form>
+        `;
+    };
+
+    function readResults(){
+        document.getElementById('manageraction').innerHTML = `
+             <div id="choicesSearch">
+                <button type="button" class="individual" onclick="individualResults();">
+                    Pesquisar aluno
+                </button>
+                <button type="button" class="turma">
+                    Resultados da Turma
+                </button>
+            </div>
+        `;
+    }
+
+    function individualResults(){
+        document.getElementById('manageraction').innerHTML = `
+            <div id="choicesSearch">
+                <button type="button" class="individual" onclick="individualResults();">
+                    Pesquisar aluno
+                </button>
+                <button type="button" class="turma">
+                    Resultados da Turma
+                </button>
+            </div>
+            <div id="chosenOne-individual">
+                <form action="cpf_search" class="createForm" id="cpf_search_id">
+                    <input type="text" name="studentCPF" id="studentCPF" placeholder="CPF">
+                    <button type="button" onclick="approvedImage(); searchCPF();">
+                        Pesquisar
+                    </button>
+                </form>
+
+                <div class="resultado-individual">
+                    <div class="conteudo-individual">
+
+                        <label for="nome">Nome:</label>
+                        <span id="nome-individual" class="nota-individual nome-individual">...NAME...</span>
+
+                        <label for="nota1">Nota 1:</label>
+                        <span id="nota1-individual" class="nota-individual">0</span>
+
+                        <label for="nota2">Nota 2:</label>
+                        <span id="nota2-individual" class="nota-individual">0</span>
+
+                        <label for="nota3">Nota 3:</label>
+                        <span id="nota3-individual" class="nota-individual">0</span>
+                        
+                        <label for="media">Media:</label>
+                        <span id="media-individual" class="nota-individual">0</span>
+                    </div>
+                    <div class="imagem-individual" id="imagem-individual">
+                        
+                    </div>
+                </div>
+            </div>
+        `;
+    }
+
+    function approvedImage(){
+        const nome = document.getElementById('nome-individual').innerText;
+
+        let media = document.getElementById('media-individual').innerText;
+
+        if (nome == '...NAME...') {
+            return;
+        }
+        if (media >= 6) {
+            document.getElementById('imagem-individual').innerHTML = `
+                <img src="aprovadoimg.png" alt="" class="aprovado-reprovado">
+            `;
+
+            return;
+        }
+
+        document.getElementById('imagem-individual').innerHTML = `
+            <img src="reprovado.png" alt="" class="aprovado-reprovado">
+        `;
+
+        return;
+    }
+
+    function deleteStudent(){
+        document.getElementById('manageraction').innerHTML = `
+            <h2>Não implementado ainda</h2>
+        `;
+    }
+
+    function readBG() {
+        document.getElementById('sidebar').classList.remove('readBG', 'updateBG', 'deleteBG');
+        document.getElementById('sidebar').classList.toggle('readBG');
+    };
+    function updateBG() {
+        document.getElementById('sidebar').classList.remove('readBG', 'updateBG', 'deleteBG');
+        document.getElementById('sidebar').classList.toggle('updateBG');
+    };
+
+    function deleteBG(){
+        document.getElementById('sidebar').classList.remove('readBG', 'updateBG', 'deleteBG');
+        document.getElementById('sidebar').classList.toggle('deleteBG')
+    };
+
+    function createBG() {
+        document.getElementById('sidebar').classList.remove('readBG', 'updateBG', 'deleteBG');
+    };
+
+    function novoAluno(){
+        
+        let nome = document.getElementById('nome').value;
+        let cpf = document.getElementById('cpf').value;
+
+        fetch('createStudent',
+            {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'text/plain'
+                },
+                body: nome + "&" + cpf
+            }
+        ).then(resposta => resposta.text()).then(data => console.log(data));
+
+        popupCreated(nome);
+    };
+
+    function popupCreated(nome) {
+    
+        const pop = document.getElementById("popupCreated");
+
+        pop.innerHTML = `O aluno ${nome} foi registrado com sucesso.`;
+
+        pop.classList.toggle("popupCreated");
+
+        setTimeout(() => {
+            pop.classList.toggle("popupCreated");
+        }, 2000);
+    };
+
+    function tome(){
+        const c = tomeCounter % 2;
+        tomeCounter++;
+
+        switch (c) {
+            case 0:
+                document.getElementById('tome').innerHTML = `
+                    <audio src="gangster_receba.mp3" id="audioEnviar"></audio>
+                `;
+                break;
+        
+            case 1:
+                document.getElementById('tome').innerHTML = `
+                    <audio src="tome.mp3" id="audioEnviar"></audio>
+                `;
+                break;
+        
+            default:
+                break;
+        }
+
+        document.getElementById('audioEnviar').play();
+    }
+
+    function searchCPF(){
+
+        const cpf = document.getElementById("studentCPF").value.replace(/\D/g, "");
+        
+        if (cpf.length != 11) {
+
+            alert(`${cpf.length} Um cpf deve conter 11 números.`);
+            return;
+        }
+
+        fetch(`searchCPF/${cpf}&`).then(resposta => resposta.text()).then(dados => alert(dados));
+        
+    }
+
+    function fillUI(dados){
+        console.log(dados);
+    }
+
+    function navbar(){
+        // essa função só coloca um padding-top no conteúdo para ele não ficar atrás da barra de navegação.
+
+        const navbar = document.getElementById('cabecalho');
+        const altura = navbar.offsetHeight;
+
+        document.getElementById('contentBody').style.paddingTop = altura + "px";
+    }
+
+    window.addEventListener("load", navbar);
+    window.addEventListener("resize", navbar);
+
+</script>
+</html>

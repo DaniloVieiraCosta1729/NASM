@@ -1,0 +1,258 @@
+body{
+    font-family: "Rubik", sans-serif;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    padding: 0;
+    background-color: #403d39;
+    color: #fffcf2;
+    margin: 0;
+}
+
+header{
+    padding: 15px;
+    background-color: #eb5e28;
+    position: fixed;
+    width: 100%;
+    z-index: 1;
+}
+.navebar{
+    box-shadow: inset;
+    background-color: #252422;
+    color: #fffcf2;
+    padding: 0.5vh;
+    display: flex;
+    justify-content: center;
+    border-radius: 1.5vh;
+    margin-left: 20vh;
+    margin-right: 20vh;
+}
+
+.navebar a{
+    text-decoration: none;
+    color: #fffcf2;
+}
+
+.navebar span{
+    margin-left: 3vh;
+    margin-right: 3vh;
+    margin-top: auto;
+    margin-bottom: auto;
+}
+
+.navebar span a:hover{
+    display: inline-block;
+    color: rgb(244, 100, 100);
+}
+
+.navebar #about{
+    margin-right: auto;
+}
+
+.logo{
+    height: 5vh;
+    width: auto;
+    margin-right: auto;
+    margin-left: 10vh;
+}
+
+.content{
+    display: flex;
+    margin-left: 3vh;
+    margin-right: 3vh;
+    height: 100%;
+}
+
+.prensentation{
+    background-color: darkseagreen;
+    width: auto;
+}
+
+.sidebar{
+    list-style: none;
+    width: 30%;
+    background-image: url(home.png);
+    background-size: cover;
+    margin: 1vh;
+    padding: 1vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    border-radius: 0.5vh;
+    height: 100%;
+    margin-right: 3vh;
+    transition: background 0.3s;
+}
+
+.readBG{
+    background-image: url(bg2.png);
+    background-size: cover;
+}
+
+.updateBG{
+    background-image: url(createbg.png);
+    background-size: cover;
+}
+
+.deleteBG{
+    background-image: url(bgdelete.png);
+    background-size: cover;
+}
+
+.createBG{
+    background-image: url(createbg.png);
+    background-size: cover;
+}
+button{
+    font-family: "Orbitron", sans-serif;
+}
+
+.sidebar li button{
+    display: flex;
+    background-color: #252422;
+    color: #fffcf2;
+    font-family: "Orbitron", sans-serif;;
+    font-weight: 400;
+    width: 30vh;
+    padding: 1vh;
+    margin: 0.5vh;
+    border-radius: 0.5vh;
+    border-style: none;
+    font-weight: 600;
+    justify-content: center;
+    transition: transform 0.5s ease;
+}
+
+.sidebar button:hover{
+    transform: rotate(360deg);
+
+}
+
+#manager{
+    padding: 2vh;
+    background-color: #403d39;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    text-align: center;
+    color: #fffcf2;
+}
+
+#popupCreated{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 2vh;
+    padding: 2vh;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    top: -30px;
+    transition: all 0.3s ease;
+}
+.popupCreatedInvisivel{
+    background-color: rgba(255, 255, 255, 0);
+    color: rgba(255, 255, 255, 0);
+}
+.popupCreated{
+    background-color: #eb5f28dd;
+    color: #252422;
+    top: 20px;
+}
+
+.atributeScore{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+form{
+    display: flex;
+    flex-direction: column;
+}
+
+label{
+    color: #eb5e28;
+    font-weight: 500;
+    font-family: "Playwrite HU", cursive;
+    margin-left: 1vh;
+    margin-right: auto;
+}
+.createForm input{
+    padding: 0.6vh;
+    margin-bottom: 1vh;
+}
+
+.createForm input:focus{
+    outline: none;
+    border-style: ridge;
+    border-color: #eb5e28;
+}
+
+.createForm button{
+    margin: none;
+    padding: 0.6vh;
+    font-family: "Orbitron", sans-serif;
+}
+
+.atributeScore input{
+    width: auto;
+    margin: 0.3vh;
+    margin-bottom: 2vh;
+}
+
+.atributeScoreForm input{
+    font-family: "Orbitron", sans-serif;
+}
+
+.atributeScoreForm input:focus{
+    outline: none;
+    border-style: ridge;
+    border-color: #eb5e28;
+    font-family: "Orbitron", sans-serif;
+}
+
+.aprovado-reprovado{
+    width: 30%;
+    position: fixed;
+}
+
+.resultado-individual{
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    align-items: center;
+}
+
+.conteudo-individual{
+    display: flex;
+    flex-direction: column;
+}
+
+.nota-individual{
+    display: flex;
+    flex-direction: column;
+    width: 40%;
+    padding: 0.5vh;
+    border-style: solid;
+    border-color: #eb5e28;
+    font-weight: 400;
+    color: #fffcf2;
+    font-family: "Orbitron", sans-serif;
+}
+.nome-individual{
+    width: 100%;
+}
+#cpf_search_id{
+    margin-top: 1vh;
+    margin-bottom: 5vh;
+}
+
+#choicesSearch button{
+    padding: 1vh;
+}
+
+#studentCPF{
+    font-family: "Orbitron", sans-serif;
+}
