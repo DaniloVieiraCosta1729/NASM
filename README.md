@@ -9,7 +9,7 @@ Este repositório reúne meus exercícios e experimentos em Assembly (NASM), pri
 - **ex_guanabara_assembly/** — exercícios recriados do curso do Guanabara em Assembly (até o exercício 6 completos, o exercício 7 começado)  
 - **Funções matemáticas em ponto flutuante** — implementação de raiz quadrada (aproximação), `ln(x)` e operações usando representação IEEE 754  
 - **Uso de `struc` no NASM** — para organização de dados em structs  
-- **Syscalls** — função geradora de inteiros pseudo-aleatórios usando `sys_gettimeofday` (em outro repositório)  
+- **Syscalls** — função geradora de inteiros pseudo-aleatórios usando `sys_gettimeofday` 
 - **Servidor TCP (em C, prévia para versão em ASM)** — código cliente/servidor TCP + parte web (HTML / CSS) + persistência com SQLite  
 
 ---
