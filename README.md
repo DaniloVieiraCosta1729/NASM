@@ -11,3 +11,5 @@ Este repositório reúne meus exercícios e experimentos em Assembly (NASM), pri
 - **Uso de `struc` no NASM** — para organização de dados em structs  
 - **Syscalls** — função geradora de inteiros pseudo-aleatórios usando `sys_gettimeofday` 
 - **Servidor TCP (em C, prévia para versão em ASM)** — código servidor TCP + parte web (HTML / CSS / JS) + persistência com SQLite  
+
+https://danilovieiracosta1729.github.io/NASM/index.html
