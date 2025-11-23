@@ -10,7 +10,7 @@ Este repositório reúne meus exercícios e experimentos em Assembly (NASM), pri
 - **Funções matemáticas em ponto flutuante** — implementação de raiz quadrada (aproximação), `ln(x)` e operações usando o expoente da representação IEEE 754  
 - **Uso de `struc` no NASM** — para organização de dados em structs  
 - **Syscalls** — função geradora de inteiros pseudo-aleatórios usando `sys_gettimeofday` 
-- **Servidor TCP (em C, prévia para versão em ASM)** — código cliente/servidor TCP + parte web (HTML / CSS) + persistência com SQLite  
+- **Servidor TCP (em C, prévia para versão em ASM)** — código servidor TCP + parte web (HTML / CSS / JS) + persistência com SQLite  
 
 ---
 
