@@ -30,6 +30,16 @@
 
 #define NOTIMPLEMENTED "HTTP/1.1 501 Not Implemented\r\nContent-Type: text/plain\r\nContent-Length: 49\r\nConnection: close\r\n\r\nO metodo nao e suportado, amigo."
 
+// Agora vamos usar a, recém aprendida, X macro.
+
+// JSON para pesquisa individual:
+#define JSON_STUDENT(learner) \
+    Xs(nome, (learner)->name) \
+    Xs(cpf, (learner)->cpf) \
+    Xi(nota1, (learner)->score1) \
+    Xi(nota2, (learner)->score2) \
+    Xi(nota3, (learner)->score3) 
+
 typedef struct {
     char name[64];
     char cpf[16];
@@ -50,9 +60,11 @@ volatile enum connecting serving = RUNNING;
 
 const char * ContentType(char *filename);
 int obtainMethod(const char * buffer);
-void handleGET(int clientFD, char * request);
+void handleGET(int clientFD, char * request, sqlite3 * db);
 void handlePOST(int clientFD, char * request, sqlite3 * db);
 void * addStudent(void * dataTask);
+void * searchCPF(void * dataTask);
+int cbSendStudent(void * aluno, int argc, char ** argv, char ** colName);
 sqlite3 * dbOpen();
 
 int main()
@@ -102,7 +114,7 @@ int main()
         switch (methodMask)
         {
         case GET:
-            handleGET(clientFD, buffer);
+            handleGET(clientFD, buffer, db);
             break;
 
         case POST:
@@ -147,10 +159,26 @@ int obtainMethod(const char * buffer) // não gosto da ideia de aumentar a pilha
     return -1;    
 }
 
-void handleGET(int clientFD, char * request)
+void handleGET(int clientFD, char * request, sqlite3 * db)
 {
     char * filename = request + 5;
     filename[strcspn(filename," ")] = '\0';
+
+    if (!strncmp(filename, "searchCPF", 9))
+    {
+        printf(">>>>>>>>>>>> Pesquisar CPF <<<<<<<<<<<");
+
+        char * msg = "Resultado da pesquisa eh vlw!";
+
+        char http[256];
+
+        sprintf(http, "HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: %ld\r\nConnection: close\r\n\r\n%s", strlen(msg), msg);
+
+        send(clientFD, http, strlen(http), 0);
+
+
+        return;
+    } 
 
     char path[50];
     sprintf(path, "./front/%s", filename);
@@ -305,7 +333,7 @@ sqlite3 * dbOpen()
     
     printf("Banco aberto.");
 
-    sqlite3_exec(db,"CREATE TABLE IF NOT EXISTS students(id integer primary key, name text not null, cpf text not null, score1 integer, score2 integer, score3 integer);",NULL, 0, 0);
+    sqlite3_exec(db,"CREATE TABLE IF NOT EXISTS students(id integer primary key, name text not null, cpf text unique not null, score1 integer, score2 integer, score3 integer);",NULL, 0, 0);
 
     return db;
 }
@@ -325,4 +353,32 @@ void * addStudent(void * dataTask)
     free(data);
 
     return NULL;    
+}
+
+void * searchCPF(void * dataTask)
+{
+    containerTask * data = (containerTask *)dataTask;
+    student learner = data->learner;
+    sqlite3 * db = data->db;
+    
+    char sql[256];
+
+    sprintf(sql, "SELECT name, score1, score2, score3 FROM students WHERE cpf='%s';", learner.cpf);
+
+    int r = sqlite3_exec(db, sql, cbSendStudent, &learner, 0);
+
+    free(data);
+
+    return NULL;
+}
+
+int cbSendStudent(void * aluno, int argc, char ** argv, char ** colName)
+{
+    student * brat = (student *)aluno;
+    strcpy(brat->name, argv[0]);
+    brat->score1 = atoi(argv[1]);
+    brat->score2 = atoi(argv[2]);
+    brat->score3 = atoi(argv[3]);
+
+    return 0;
 }
