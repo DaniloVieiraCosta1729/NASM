@@ -4,7 +4,8 @@ body{
     flex-direction: column;
     height: 100vh;
     padding: 0;
-    background-color: #ffffff;
+    background-color: #403d39;
+    color: #fffcf2;
     margin: 0;
 }
 
@@ -13,6 +14,7 @@ header{
     background-color: #eb5e28;
     position: fixed;
     width: 100%;
+    z-index: 1;
 }
 .navebar{
     box-shadow: inset;
@@ -57,7 +59,7 @@ header{
 .content{
     display: flex;
     margin-left: 3vh;
-    margin-right: 10vh;
+    margin-right: 3vh;
     height: 100%;
 }
 
@@ -209,5 +211,48 @@ label{
     outline: none;
     border-style: ridge;
     border-color: #eb5e28;
+    font-family: "Orbitron", sans-serif;
+}
+
+.aprovado-reprovado{
+    width: 30%;
+    position: fixed;
+}
+
+.resultado-individual{
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    align-items: center;
+}
+
+.conteudo-individual{
+    display: flex;
+    flex-direction: column;
+}
+
+.nota-individual{
+    display: flex;
+    flex-direction: column;
+    width: 40%;
+    padding: 0.5vh;
+    border-style: solid;
+    border-color: #eb5e28;
+    font-weight: 400;
+    color: #fffcf2;
+    font-family: "Orbitron", sans-serif;
+}
+.nome-individual{
+    width: 100%;
+}
+#cpf_search_id{
+    margin-top: 1vh;
+    margin-bottom: 5vh;
+}
+
+#choicesSearch button{
+    padding: 1vh;
+}
+
+#studentCPF{
     font-family: "Orbitron", sans-serif;
 }

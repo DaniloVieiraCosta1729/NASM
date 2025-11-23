@@ -113,8 +113,82 @@
 
     function readResults(){
         document.getElementById('manageraction').innerHTML = `
-            <h2>Não implementado ainda</h2>
+             <div id="choicesSearch">
+                <button type="button" class="individual" onclick="individualResults();">
+                    Pesquisar aluno
+                </button>
+                <button type="button" class="turma">
+                    Resultados da Turma
+                </button>
+            </div>
         `;
+    }
+
+    function individualResults(){
+        document.getElementById('manageraction').innerHTML = `
+            <div id="choicesSearch">
+                <button type="button" class="individual" onclick="individualResults();">
+                    Pesquisar aluno
+                </button>
+                <button type="button" class="turma">
+                    Resultados da Turma
+                </button>
+            </div>
+            <div id="chosenOne-individual">
+                <form action="cpf_search" class="createForm" id="cpf_search_id">
+                    <input type="text" name="studentCPF" id="studentCPF" placeholder="CPF">
+                    <button type="button" onclick="approvedImage(); searchCPF();">
+                        Pesquisar
+                    </button>
+                </form>
+
+                <div class="resultado-individual">
+                    <div class="conteudo-individual">
+
+                        <label for="nome">Nome:</label>
+                        <span id="nome-individual" class="nota-individual nome-individual">...NAME...</span>
+
+                        <label for="nota1">Nota 1:</label>
+                        <span id="nota1-individual" class="nota-individual">0</span>
+
+                        <label for="nota2">Nota 2:</label>
+                        <span id="nota2-individual" class="nota-individual">0</span>
+
+                        <label for="nota3">Nota 3:</label>
+                        <span id="nota3-individual" class="nota-individual">0</span>
+                        
+                        <label for="media">Media:</label>
+                        <span id="media-individual" class="nota-individual">0</span>
+                    </div>
+                    <div class="imagem-individual" id="imagem-individual">
+                        
+                    </div>
+                </div>
+            </div>
+        `;
+    }
+
+    function approvedImage(){
+        const nome = document.getElementById('nome-individual').innerText;
+
+        let media = document.getElementById('media-individual').innerText;
+
+        if (nome == '...NAME...') {
+            return;
+        }
+        if (media >= 6) {
+            document.getElementById('imagem-individual').innerHTML = `
+                <img src="aprovadoimg.png" alt="" class="aprovado-reprovado">
+            `;
+
+            return;
+        }
+
+        document.getElementById('imagem-individual').innerHTML = `
+            <img src="reprovado.png" alt="" class="aprovado-reprovado">
+        `;
+
+        return;
     }
 
     function deleteStudent(){
@@ -194,6 +268,24 @@
         }
 
         document.getElementById('audioEnviar').play();
+    }
+
+    function searchCPF(){
+
+        const cpf = document.getElementById("studentCPF").value.replace(/\D/g, "");
+        
+        if (cpf.length != 11) {
+
+            alert(`${cpf.length} Um cpf deve conter 11 números.`);
+            return;
+        }
+
+        fetch(`searchCPF/${cpf}&`).then(resposta => resposta.text()).then(dados => alert(dados));
+        
+    }
+
+    function fillUI(dados){
+        console.log(dados);
     }
 
     function navbar(){
