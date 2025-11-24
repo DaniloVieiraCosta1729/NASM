@@ -1,6 +1,6 @@
 # NASM — Repositório de Exercícios em Assembly x86-64
 
-Este repositório reúne meus exercícios e experimentos em Assembly (NASM), principalmente inspirados nos exercícios do curso de Python do Guanabara, além de implementações de funções matemáticas, manipulação de structs, syscalls e um esboço de servidor TCP em C (pré-trabalho para a versão em Assembly).
+Este repositório reúne meus exercícios e experimentos em Assembly (NASM), principalmente inspirados nos exercícios do curso de Python do Guanabara, além de implementações de funções matemáticas, manipulação de structs, syscalls e um servidor TCP em C (pré-trabalho para a versão em Assembly).
 
 ---
 
